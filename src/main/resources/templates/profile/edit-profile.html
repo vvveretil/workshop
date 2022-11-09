@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html>
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="container">
+    <div class="section">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+            <div class="profile-info">
+                <h3 style="margin-right: 20px">My profile</h3>
+
+                <form th:method="put" th:action="@{/edit-profile}" th:object="${userUpdateInfoRequest}">
+                    <ul class="list-group list-group-light list-group-small"
+                        style="display: inline-block; font-size: 20px;">
+                        <li class="list-group-item">
+                            <label class="form-label" for="firstName">First name</label>
+                            <input th:value="${#authentication.getPrincipal().getFirstName()}" type="text" name="firstName" id="firstName"
+                                   class="form-control"/>
+                        </li>
+
+                        <li class="list-group-item">
+                            <label class="form-label" for="lastName">Last name</label>
+                            <input th:value="${#authentication.getPrincipal().getLastName()}" type="text" name="lastName" id="lastName"
+                                   class="form-control"/>
+                        </li>
+
+                        <li class="list-group-item">
+                            <label class="form-label" for="username">Email address</label>
+                            <input th:value="${#authentication.getPrincipal().getUsername()}" type="email" name="username" id="username"
+                                   class="form-control"/>
+                            <input th:value="${#authentication.getPrincipal().getUsername()}" type="hidden" name="currentUsername" id="currentUsername"
+                                   class="form-control"/>
+                            <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}" />
+                        </li>
+
+                        <li class="list-group-item">
+                            <label class="form-label" for="phoneNumber">Phone number</label>
+                            <input th:value="${#authentication.getPrincipal().getPhoneNumber()}" type="text" name="phoneNumber" id="phoneNumber"
+                                   class="form-control"/>
+                        </li>
+                    </ul>
+
+                    <div>
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a href="/profile" type="submit" class="btn btn-danger">Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>
