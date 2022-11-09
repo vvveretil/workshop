@@ -1,0 +1,40 @@
+.form {
+    width: 30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.login-alert {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.section{
+    padding-top: 30px;
+}
+
+.error {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    color: red;
+}
+
+.error-input {
+    outline-color: red;
+}
+
+.section__inner{
+    padding: 40px 0;
+}
+
+.list-header{
+    font-weight: bold;
+}
+
+.section__inner table th{
+    font-weight: bold;
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      th:fragment="head">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <title>Workshop</title>
+    <!-- MDB icon -->
+    <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon"/>
+    <!-- Font Awesome -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" th:href="@{/css/mdb.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:fragment="header">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark ">
+        <!-- Container wrapper -->
+        <div class="container">
+
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="/">Workshop</a>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <!-- Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Main</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contacts">Contacts</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+
+                </ul>
+
+                <ul class="navbar-nav d-flex flex-row me-1">
+                    <li class="nav-item me-3 me-lg-0" sec:authorize="isAnonymous()">
+                        <a class="nav-link" href="/login">Sign in</a>
+                    </li>
+                    <li class="nav-item me-3 me-lg-0" sec:authorize="isAnonymous()">
+                        <a class="nav-link" href="/registration">Sign up</a>
+                    </li>
+                    <li class="nav-item me-3 me-lg-0" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="/logout">Log out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+</header>
+
+<div class="btn-group profile-tabs" th:fragment="tabs">
+    <a th:href="@{/profile}" class="btn btn-primary" th:classappend="${#request.requestURI.startsWith('/profile') ? 'active':''}">Profile</a>
+    <a th:href="@{/applications}" class="btn btn-primary" th:classappend="${#request.requestURI.startsWith('/applications') && !#request.requestURI.contains('/new') ? 'active':''}">Applications</a>
+    <a th:href="@{/applications/new}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_USER')" th:classappend="${#request.requestURI.startsWith('/applications/new') ? 'active':''}">Create application</a>
+    <a th:href="@{/users}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')" th:classappend="${#request.requestURI.startsWith('/users') || #request.requestURI.startsWith('/masters') ? 'active':''}">Users</a>
+</div>
+
+<dev th:fragment="script">
+    <!-- MDB -->
+    <script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+</dev>
+</body>
+</html>
