@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      persistent: false
+
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/workshop'
+    username: 'root'
+    password: 'admin'
+
+
+  mandatory-file-encoding: UTF-8
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
