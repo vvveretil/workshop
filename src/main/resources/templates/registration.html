@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html>
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="section">
+    <div class="container">
+        <form method="post" th:action="@{/registration}" th:object="${registrationRequest}" class="mb-4 form">
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-outline">
+                        <input required th:field="*{firstName}" type="text" id="firstName" class="form-control" />
+                        <label class="form-label" for="firstName">First name</label>
+                    </div>
+                    <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{lastName}" />
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <input required th:field="*{lastName}" type="text" id="lastName" class="form-control" />
+                        <label class="form-label" for="lastName">Last name</label>
+                    </div>
+                    <p th:if="${#fields.hasErrors('lastName')}" th:errorclass="error" th:errors="*{lastName}" />
+                </div>
+            </div>
+
+            <div class="col mb-4">
+                <div class="form-outline">
+                    <input required th:field="*{phoneNumber}" type="text" id="phoneNumber" class="form-control" />
+                    <label class="form-label" for="username">Phone number</label>
+                </div>
+                <p th:if="${#fields.hasErrors('phoneNumber')}" th:errorclass="error" th:errors="*{phoneNumber}" />
+            </div>
+
+            <!-- Email input -->
+            <div class="col mb-4">
+                <div class="form-outline">
+                    <input required th:field="*{username}" type="email" id="username" class="form-control" />
+                    <label class="form-label" for="username">Email address</label>
+                </div>
+                <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}" />
+            </div>
+
+            <!-- Password input -->
+            <div class="col mb-4">
+                <div class="form-outline">
+                    <input required th:field="*{password}" type="password" id="password" class="form-control" />
+                    <label class="form-label" for="password">Password</label>
+                </div>
+                <p th:if="${#fields.hasErrors('matchingPassword')}" th:errorclass="error" th:errors="*{matchingPassword}" />
+            </div>
+
+            <div class="col mb-4">
+                <div class="form-outline">
+                    <input required th:field="*{matchingPassword}" type="password" id="matchingPassword" class="form-control" />
+                    <label class="form-label" for="matchingPassword">Repeat password</label>
+                </div>
+                <p th:if="${#fields.hasErrors('matchingPassword')}" th:errorclass="error" th:errors="*{matchingPassword}" />
+            </div>
+
+            <!-- Checkbox -->
+            <div class="form-check d-flex justify-content-center mb-4">
+                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
+                <label class="form-check-label" for="form2Example33">
+                    Subscribe to our newsletter
+                </label>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+        </form>
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>
