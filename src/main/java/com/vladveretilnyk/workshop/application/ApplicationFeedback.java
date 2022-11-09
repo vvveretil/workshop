@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ApplicationFeedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

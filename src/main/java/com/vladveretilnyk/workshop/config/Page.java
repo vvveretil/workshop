@@ -10,7 +10,11 @@ public class Page {
 
     public static final String CHANGE_PASSWORD_PAGE = "profile/change-password";
 
+    public static final String CREATE_APPLICATION_PAGE = "application/create-application";
+    public static final String APPLICATIONS_PAGE = "application/applications";
+
     public static final String REDIRECT_LOGIN_PAGE = "redirect:/" + LOGIN_PAGE;
     public static final String REDIRECT_PROFILE_PAGE = "redirect:/profile";
+    public static final String REDIRECT_APPLICATIONS_PAGE = "redirect:/applications";
 
 }

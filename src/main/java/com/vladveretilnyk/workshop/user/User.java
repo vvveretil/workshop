@@ -3,7 +3,6 @@ package com.vladveretilnyk.workshop.user;
 import com.vladveretilnyk.workshop.application.Application;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -79,4 +78,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }

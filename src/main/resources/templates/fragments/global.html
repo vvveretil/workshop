@@ -78,7 +78,7 @@
 <div class="btn-group profile-tabs" th:fragment="tabs">
     <a th:href="@{/profile}" class="btn btn-primary" th:classappend="${#request.requestURI.startsWith('/profile') ? 'active':''}">Profile</a>
     <a th:href="@{/applications}" class="btn btn-primary" th:classappend="${#request.requestURI.startsWith('/applications') && !#request.requestURI.contains('/new') ? 'active':''}">Applications</a>
-    <a th:href="@{/applications/new}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_USER')" th:classappend="${#request.requestURI.startsWith('/applications/new') ? 'active':''}">Create application</a>
+    <a th:href="@{/create-application}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_USER')" th:classappend="${#request.requestURI.startsWith('/create-application') ? 'active':''}">Create application</a>
     <a th:href="@{/users}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')" th:classappend="${#request.requestURI.startsWith('/users') || #request.requestURI.startsWith('/masters') ? 'active':''}">Users</a>
 </div>
 

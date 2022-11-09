@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="section">
+    <div class="container">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th sec:authorize="hasAuthority('ROLE_ADMIN')" scope="col">Client</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Creation date</th>
+                    <th scope="col">Master</th>
+                    <th scope="col">Completion status</th>
+                    <th scope="col">Payment status</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Change</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="appl : ${applications}">
+                    <td><span th:text="${appl.id}"> # </span></td>
+                    <td sec:authorize="hasAuthority('ROLE_ADMIN')"><a th:href="@{/users/__${appl.users.get(0).id}__}"
+                                                                      th:text="${appl.users.get(0).username}"> Client </a></td>
+                    <td><span th:text="${appl.title.length()>=15}?${appl.title.substring(0,15)+'...'}:${appl.title}"> Title </span>
+                    </td>
+                    <td><span th:text="${appl.creationDate}"> Creation date </span></td>
+                    <td>
+                        <span th:if="${appl.users.size() <= 1} " th:text="'Not set'"></span>
+                        <div sec:authorize="hasAuthority('ROLE_ADMIN')">
+                            <a th:href="@{/masters}">Choose master</a>
+                        </div>
+                        <span th:else th:each="user : ${appl.users}" th:object="${user}">
+                            <span th:each="role : *{authorities}" th:object="${role}" th:if="${role.name} == 'MASTER'">
+                                <a th:href="@{/users/__${user.id}__}" th:text="${user.username}"> Master </a>
+                            </span>
+                        </span>
+                    </td>
+                    <td><span th:text="${appl.completionStatus}"> Completion status </span></td>
+                    <td><span th:text="${appl.paymentStatus}"> Payment status </span></td>
+                    <td><span th:text="${appl.price}"> Price </span></td>
+                    <td>
+                        <div>
+                            <a th:href="@{/applications/__${appl.id}__}" class="btn btn-info">Preview</a>
+                        </div>
+
+                        <form style="margin-top: 10px" th:action="@{/applications/__${appl.id}__}" th:method="delete">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>

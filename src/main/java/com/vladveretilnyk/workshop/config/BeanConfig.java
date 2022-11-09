@@ -1,7 +1,10 @@
 package com.vladveretilnyk.workshop.config;
 
+import com.vladveretilnyk.workshop.application.Application;
+import com.vladveretilnyk.workshop.application.request.ApplicationCreateRequest;
 import com.vladveretilnyk.workshop.user.UserService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +25,19 @@ public class BeanConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(applicationCreateRequestApplicationPropertyMap());
+
+        return modelMapper;
     }
 
+    @Bean
+    public PropertyMap<ApplicationCreateRequest, Application> applicationCreateRequestApplicationPropertyMap() {
+        return new PropertyMap<>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        };
+    }
 }
