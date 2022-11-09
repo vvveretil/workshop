@@ -26,9 +26,9 @@ public class WebSecurityConfiguration {
                 .antMatchers(HttpMethod.POST, "/applications/**").hasAnyRole(ADMIN.name(), MASTER.name(), USER.name())
 
                 .antMatchers("/profile/**").hasAnyRole(ADMIN.name(), MASTER.name(), USER.name())
-                .antMatchers("/users/**", "/masters/**").hasRole(ADMIN.name())
+                .antMatchers("/users/**").hasRole(ADMIN.name())
 
-                .antMatchers("/main.html", "/about", "/contacts", "/login", "/registration", "/css/**", "/js/**").permitAll()
+                .antMatchers("/about", "/contacts", "/login", "/registration", "/css/**", "/js/**").permitAll()
 
                 .anyRequest().authenticated()
 

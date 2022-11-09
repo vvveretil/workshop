@@ -32,7 +32,7 @@
                             <label class="form-label" for="username">Email address</label>
                             <input th:value="${#authentication.getPrincipal().getUsername()}" type="email" name="username" id="username"
                                    class="form-control"/>
-                            <input th:value="${#authentication.getPrincipal().getUsername()}" type="hidden" name="currentUsername" id="currentUsername"
+                            <input th:value="${#authentication.getPrincipal().getId()}" type="hidden" name="id"
                                    class="form-control"/>
                             <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}" />
                         </li>

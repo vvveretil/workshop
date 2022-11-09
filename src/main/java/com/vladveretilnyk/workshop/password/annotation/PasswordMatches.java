@@ -1,6 +1,7 @@
 package com.vladveretilnyk.workshop.password.annotation;
 
 import com.vladveretilnyk.workshop.registration.validation.RegistrationValidator;
+import com.vladveretilnyk.workshop.user.validation.UserChangePasswordValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -14,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(value = {TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = RegistrationValidator.class)
+@Constraint(validatedBy = {RegistrationValidator.class, UserChangePasswordValidator.class})
 @Documented
 public @interface PasswordMatches {
     String message() default "Passwords do not match";

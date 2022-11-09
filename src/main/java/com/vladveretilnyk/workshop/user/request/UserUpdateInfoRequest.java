@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UserUpdateInfoRequest {
 
-    private String currentUsername;
+    private Long id;
 
     private String username;
     private String firstName;
