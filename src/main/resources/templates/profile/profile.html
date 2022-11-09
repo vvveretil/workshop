@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="container">
+    <div class="section">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+            <div class="profile-info">
+                <div style="display: flex">
+                    <h3 style="margin-right: 20px">My profile</h3>
+                    <div>
+                        <a href="/edit-profile" class="btn btn-info">Edit</a>
+                    </div>
+                    <div>
+                        <a href="/change-password" class="btn btn-info" style="margin-left: 20px">Change password</a>
+                    </div>
+                </div>
+                <ul class="list-group list-group-light list-group-small" style="display: inline-block; font-size: 20px;">
+                    <li class="list-group-item ">
+                        <div class="list-header">First name</div>
+                        <div class="profile-item-value" th:text ="${#authentication.getPrincipal().getFirstName()}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Last name</div>
+                        <div class="profile-item-value" th:text ="${#authentication.getPrincipal().getLastName()}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Email</div>
+                        <div class="profile-item-value" th:text ="${#authentication.getPrincipal().getUsername()}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Phone number</div>
+                        <div class="profile-item-value" th:text ="${#authentication.getPrincipal().getPhoneNumber()}"/>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>
