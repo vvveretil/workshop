@@ -1,10 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="section">
+    <div class="container">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+
+            <div style="display: flex">
+                <h3 style="margin-right: 20px" th:text="Application + ' №' + ${appl.id}">Application</h3>
+                <div>
+                    <a th:href="@{/edit-application(applicationId=${appl.id})}" class="btn btn-info">Edit</a>
+                </div>
+            </div>
+            <ul class="list-group list-group-light list-group-small" style="display: inline-block; font-size: 20px;">
+                <li class="list-group-item ">
+                    <div class="list-header">Author</div>
+                    <div th:else th:each="user : ${appl.users}" th:object="${user}">
+                        <div th:each="role : *{authorities}" th:object="${role}" th:if="${role.name} == 'USER'">
+                            <div th:text="${user.username}"> User </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Title</div>
+                    <div class="profile-item-value" th:text="${appl.title}"/>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Description</div>
+                    <div class="profile-item-value" th:text="${appl.description}"/>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Creation date</div>
+                    <div class="profile-item-value" th:text="${appl.creationDate}"/>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Master</div>
+                    <div th:if="${appl.users.size() <= 1} " th:text="'Not set'"></div>
+
+                    <div th:else th:each="user : ${appl.users}" th:object="${user}">
+                        <div th:each="role : *{authorities}" th:object="${role}" th:if="${role.name} == 'MASTER'">
+                            <div th:text="${user.username}"> Master</div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Completion status</div>
+                    <div class="profile-item-value" th:text="${appl.completionStatus}"/>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Payment status</div>
+                    <div class="profile-item-value" th:text="${appl.paymentStatus}"/>
+                </li>
+
+                <li class="list-group-item ">
+                    <div class="list-header">Price</div>
+                    <div class="profile-item-value" th:text="${appl.price}"/>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>

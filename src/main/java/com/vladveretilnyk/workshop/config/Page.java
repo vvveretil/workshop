@@ -12,6 +12,8 @@ public class Page {
 
     public static final String CREATE_APPLICATION_PAGE = "application/create-application";
     public static final String APPLICATIONS_PAGE = "application/applications";
+    public static final String APPLICATION_PAGE = "application/application";
+    public static final String EDIT_APPLICATION_PAGE = "application/edit-application";
 
     public static final String REDIRECT_LOGIN_PAGE = "redirect:/" + LOGIN_PAGE;
     public static final String REDIRECT_PROFILE_PAGE = "redirect:/profile";

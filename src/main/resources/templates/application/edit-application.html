@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="section">
+    <div class="container">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+            <h3 style="margin-right: 20px" th:text="Application + ' №' + ${appl.id}">Application</h3>
+            <form th:method="put" th:action="@{/applications/__${appl.id}__}" th:object="${applicationUpdateInfoRequest}">
+
+                <div style="margin-top: 15px; margin-bottom: 5px">Brief description</div>
+                <div class="form-outline">
+                    <input type="text" id="title" th:value="${appl.title}" name="title" class="form-control"/>
+                    <label class="form-label" for="title">Title</label>
+                </div>
+
+                <div style="margin-top: 15px; margin-bottom: 5px">Detailed description of services you want to get</div>
+                <div class="form-outline">
+                    <textarea class="form-control" th:text="${appl.description}" name="description" id="textAreaExample" rows="4"></textarea>
+                    <label class="form-label" for="textAreaExample">Description</label>
+                </div>
+
+                <div style="margin-top: 20px">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a href="/applications" type="submit" class="btn btn-danger">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>
