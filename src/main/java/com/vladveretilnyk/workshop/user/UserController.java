@@ -1,28 +1,34 @@
 package com.vladveretilnyk.workshop.user;
 
-import com.vladveretilnyk.workshop.config.Page;
 import com.vladveretilnyk.workshop.password.exception.InvalidPasswordException;
 import com.vladveretilnyk.workshop.user.exception.UserNotFountException;
 import com.vladveretilnyk.workshop.user.request.UserChangePasswordRequest;
 import com.vladveretilnyk.workshop.user.request.UserUpdateInfoRequest;
 import lombok.AllArgsConstructor;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+
+import java.util.Set;
 
 import static com.vladveretilnyk.workshop.config.Page.CHANGE_PASSWORD_PAGE;
 import static com.vladveretilnyk.workshop.config.Page.EDIT_PROFILE_PAGE;
 import static com.vladveretilnyk.workshop.config.Page.PROFILE_PAGE;
 import static com.vladveretilnyk.workshop.config.Page.REDIRECT_PROFILE_PAGE;
+import static com.vladveretilnyk.workshop.config.Page.REDIRECT_USERS_PAGE;
+import static com.vladveretilnyk.workshop.config.Page.USERS_PAGE;
+import static com.vladveretilnyk.workshop.config.Page.USER_PAGE;
 
 @Controller
 @AllArgsConstructor
@@ -82,6 +88,51 @@ public class UserController {
         }
 
         return REDIRECT_PROFILE_PAGE;
+    }
+
+    @GetMapping("/users")
+    public String getUsersPage(Model model) {
+        model.addAttribute("users", userService.findAllByRoles(Set.of(UserRole.USER, UserRole.MASTER)));
+        return USERS_PAGE;
+    }
+
+    @GetMapping("/users/{id}")
+    public String getUserPage(@PathVariable(name = "id") Long userId, Model model) throws UserNotFountException {
+        model.addAttribute("user", userService.findById(userId));
+        return USER_PAGE;
+    }
+
+    @PostMapping("/blocked-users/{id}")
+    public String blockUser(@PathVariable(name = "id") Long userId) throws UserNotFountException {
+        userService.blockById(userId);
+        userService.unassignApplicationsForUser(userId);
+        return REDIRECT_USERS_PAGE;
+    }
+
+    @DeleteMapping("/blocked-users/{id}")
+    public String unBlockUser(@PathVariable(name = "id") Long userId) throws UserNotFountException {
+        userService.unblockById(userId);
+        return REDIRECT_USERS_PAGE;
+    }
+
+    @PostMapping("/blocked-masters/{id}")
+    public String blockMaster(@PathVariable(name = "id") Long masterId) throws UserNotFountException {
+        userService.blockById(masterId);
+        userService.unassignApplicationsForMaster(masterId);
+        return REDIRECT_USERS_PAGE;
+    }
+
+    @DeleteMapping("/blocked-masters/{id}")
+    public String unblockMaster(@PathVariable(name = "id") Long masterId) throws UserNotFountException {
+        userService.unblockById(masterId);
+        return REDIRECT_USERS_PAGE;
+    }
+
+    @GetMapping("/assign-master-to-application")
+    public String getChooseMasterPage(@RequestParam Long applicationId, Model model) {
+        model.addAttribute("applicationId", applicationId);
+        model.addAttribute("users", userService.findAllByRoles(Set.of(UserRole.MASTER)));
+        return USERS_PAGE;
     }
 
 }

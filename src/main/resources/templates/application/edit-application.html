@@ -27,7 +27,7 @@
 
                 <div style="margin-top: 20px">
                     <button type="submit" class="btn btn-success">Save</button>
-                    <a href="/applications" type="submit" class="btn btn-danger">Cancel</a>
+                    <a th:href="@{/applications/__${appl.id}__}" type="submit" class="btn btn-danger">Cancel</a>
                 </div>
             </form>
         </div>

@@ -13,7 +13,7 @@
 
             <div style="display: flex">
                 <h3 style="margin-right: 20px" th:text="Application + ' №' + ${appl.id}">Application</h3>
-                <div>
+                <div th:if="${appl.completionStatus==T(com.vladveretilnyk.workshop.application.status.CompletionStatus).NOT_STARTED && appl.paymentStatus==T(com.vladveretilnyk.workshop.application.status.PaymentStatus).WAITING_FOR_PAYMENT}">
                     <a th:href="@{/edit-application(applicationId=${appl.id})}" class="btn btn-info">Edit</a>
                 </div>
             </div>
@@ -48,19 +48,19 @@
 
                     <div th:else th:each="user : ${appl.users}" th:object="${user}">
                         <div th:each="role : *{authorities}" th:object="${role}" th:if="${role.name} == 'MASTER'">
-                            <div th:text="${user.username}"> Master</div>
+                            <a th:href="@{/users/__${user.id}__}" th:text="${user.username}"> Master</a>
                         </div>
                     </div>
                 </li>
 
                 <li class="list-group-item ">
                     <div class="list-header">Completion status</div>
-                    <div class="profile-item-value" th:text="${appl.completionStatus}"/>
+                    <div class="profile-item-value" th:text="${appl.completionStatus.status}"/>
                 </li>
 
                 <li class="list-group-item ">
                     <div class="list-header">Payment status</div>
-                    <div class="profile-item-value" th:text="${appl.paymentStatus}"/>
+                    <div class="profile-item-value" th:text="${appl.paymentStatus.status}"/>
                 </li>
 
                 <li class="list-group-item ">

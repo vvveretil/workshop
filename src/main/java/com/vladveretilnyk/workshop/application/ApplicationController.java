@@ -3,7 +3,6 @@ package com.vladveretilnyk.workshop.application;
 import com.vladveretilnyk.workshop.application.exception.ApplicationNotFoundException;
 import com.vladveretilnyk.workshop.application.request.ApplicationCreateRequest;
 import com.vladveretilnyk.workshop.application.request.ApplicationUpdateInfoRequest;
-import com.vladveretilnyk.workshop.config.Page;
 import com.vladveretilnyk.workshop.user.User;
 import com.vladveretilnyk.workshop.user.exception.UserNotFountException;
 import lombok.AllArgsConstructor;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.websocket.server.PathParam;
 
@@ -32,10 +32,10 @@ public class ApplicationController {
 
     private ApplicationService applicationService;
 
-    @GetMapping("/create-application")
-    public String getCreateApplicationPage(Model model) {
-        model.addAttribute("applicationCreateRequest", new ApplicationCreateRequest());
-        return CREATE_APPLICATION_PAGE;
+    @GetMapping("/applications")
+    public String getApplicationsPage(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("applications", applicationService.findAllByUser(user));
+        return APPLICATIONS_PAGE;
     }
 
     @PostMapping("/applications")
@@ -44,22 +44,11 @@ public class ApplicationController {
         return REDIRECT_APPLICATIONS_PAGE;
     }
 
-    @GetMapping("/applications")
-    public String getApplicationsPage(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("applications", applicationService.findAllByUser(user));
-        return APPLICATIONS_PAGE;
-    }
 
     @GetMapping("/applications/{id}")
     public String getApplicationPage(@PathVariable(name = "id") Long applicationId, Model model) throws ApplicationNotFoundException {
         model.addAttribute("appl", applicationService.findById(applicationId));
         return APPLICATION_PAGE;
-    }
-
-    @DeleteMapping("/applications/{id}")
-    public String deleteApplication(@PathVariable(name = "id") Long applicationId) throws ApplicationNotFoundException {
-        applicationService.deleteById(applicationId);
-        return REDIRECT_APPLICATIONS_PAGE;
     }
 
     @GetMapping("/edit-application")
@@ -69,9 +58,33 @@ public class ApplicationController {
         return EDIT_APPLICATION_PAGE;
     }
 
+    @GetMapping("/create-application")
+    public String getCreateApplicationPage(Model model) {
+        model.addAttribute("applicationCreateRequest", new ApplicationCreateRequest());
+        return CREATE_APPLICATION_PAGE;
+    }
+
     @PutMapping("/applications/{id}")
     public String updateApplication(@PathVariable(name = "id") Long applicationId, @ModelAttribute ApplicationUpdateInfoRequest applicationUpdateInfoRequest) throws ApplicationNotFoundException {
         applicationService.updateById(applicationId, applicationUpdateInfoRequest);
         return REDIRECT_APPLICATIONS_PAGE + format("/%d", applicationId);
+    }
+
+    @DeleteMapping("/applications/{id}")
+    public String deleteApplication(@PathVariable(name = "id") Long applicationId) throws ApplicationNotFoundException {
+        applicationService.deleteById(applicationId);
+        return REDIRECT_APPLICATIONS_PAGE;
+    }
+
+    @PostMapping("/assigned-applications")
+    public String assignApplicationToMaster(@RequestParam Long applicationId, @RequestParam Long masterId) throws ApplicationNotFoundException, UserNotFountException {
+        applicationService.assignApplicationToMaster(applicationId, masterId);
+        return REDIRECT_APPLICATIONS_PAGE;
+    }
+
+    @DeleteMapping("/assigned-applications")
+    public String unassignApplicationFromMaster(@RequestParam Long applicationId, @RequestParam Long masterId) throws ApplicationNotFoundException, UserNotFountException {
+        applicationService.unassignApplicationFromMaster(applicationId, masterId);
+        return REDIRECT_APPLICATIONS_PAGE;
     }
 }

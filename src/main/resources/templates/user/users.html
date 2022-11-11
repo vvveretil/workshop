@@ -1,10 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/global.html :: head"/>
+
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="section">
+    <div class="container">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Phone number</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Role</th>
+                    <th scope="col" th:if="${#strings.isEmpty(applicationId)}">Change status</th>
+                    <th scope="col" th:if="${!#strings.isEmpty(applicationId)}">Choose</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td><span th:text="${user.id}"> # </span></td>
+                    <td><a th:href="@{/users/__${user.id}__}" th:text="${user.username}"> Username </a></td>
+                    <td><span th:text="${user.firstName}"> First name </span></td>
+                    <td><span th:text="${user.lastName}"> Last name </span></td>
+                    <td><span th:text="${user.phoneNumber}"> phoneNumber </span></td>
+                    <td><span th:text="${user.balance}"> Balance </span></td>
+                    <td>
+                        <span th:else th:each="role : ${user.authorities}" th:object="${role}">
+                            <span th:text="*{name}"> Role </span>
+                        </span>
+                    </td>
+                    <td th:if="${#strings.isEmpty(applicationId)}">
+                        <div  th:each="role : ${user.authorities}" th:object="${role}">
+                            <form th:if="${user.isAccountNonLocked && role.name=='USER'}" th:action="@{/blocked-users/__${user.id}__}" th:method="post">
+                                <button type="submit" class="btn btn-danger">Block</button>
+                            </form>
+                            <form th:if="${!user.isAccountNonLocked && role.name=='USER'}"
+                                  th:action="@{/blocked-users/__${user.id}__}" th:method="delete">
+                                <button type="submit" class="btn btn-info">Unblock</button>
+                            </form>
+
+                            <form th:if="${user.isAccountNonLocked && role.name=='MASTER'}"
+                                  th:action="@{/blocked-masters/__${user.id}__}" th:method="post">
+                                <button type="submit" class="btn btn-danger">Block</button>
+                            </form>
+                            <form th:if="${!user.isAccountNonLocked && role.name=='MASTER'}" th:action="@{/blocked-masters/__${user.id}__}" th:method="delete">
+                                <button type="submit" class="btn btn-info">Unblock</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td th:if="${!#strings.isEmpty(applicationId) && user.isAccountNonLocked}">
+                        <form th:action="@{/assigned-applications(applicationId=${applicationId},masterId=${user.id})}" th:method="post">
+                            <button type="submit" class="btn btn-success">Assign</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>

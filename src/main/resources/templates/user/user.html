@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="fragments/global.html :: head"/>
 <body>
 
+<header th:insert="fragments/global.html :: header"></header>
+
+<div class="container">
+    <div class="section">
+        <div th:insert="fragments/global.html :: tabs"></div>
+
+        <div class="section__inner">
+            <div class="profile-info">
+                <ul class="list-group list-group-light list-group-small" style="display: inline-block; font-size: 20px;">
+                    <li class="list-group-item ">
+                        <div class="list-header">First name</div>
+                        <div class="profile-item-value" th:text ="${user.firstName}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Last name</div>
+                        <div class="profile-item-value" th:text ="${user.lastName}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Email</div>
+                        <div class="profile-item-value" th:text ="${user.username}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Phone number</div>
+                        <div class="profile-item-value" th:text ="${user.phoneNumber}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="list-header">Balance</div>
+                        <div class="profile-item-value" th:text ="${user.balance}"/>
+                    </li>
+
+                    <li class="list-group-item ">
+                        <div class="profile-item-value" th:if="${user.isAccountNonLocked}" th:text="'Account is not locked'"/>
+                        <div class="profile-item-value" th:if="${!user.isAccountNonLocked}" th:text="'Account is locked'"/>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="fragments/global.html :: script"></div>
 </body>
 </html>

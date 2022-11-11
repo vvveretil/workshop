@@ -29,8 +29,7 @@ public class ApplicationService {
         User user = userService.findById(applicationCreateRequest.getAuthorId());
         Application application = modelMapper.map(applicationCreateRequest, Application.class);
 
-        application.getUsers().add(user);
-        user.getApplications().add(application);
+        addUser(application, user);
 
         save(application);
     }
@@ -67,4 +66,33 @@ public class ApplicationService {
 
         save(application);
     }
+
+    public void assignApplicationToMaster(Long applicationId, Long masterId) throws UserNotFountException, ApplicationNotFoundException {
+        Application application = findById(applicationId);
+        User master = userService.findById(masterId);
+
+        addUser(application, master);
+
+        save(application);
+    }
+
+    public void unassignApplicationFromMaster(Long applicationId, Long masterId) throws UserNotFountException, ApplicationNotFoundException {
+        Application application = findById(applicationId);
+        User master = userService.findById(masterId);
+
+        removeUser(application, master);
+
+        save(application);
+    }
+
+    private void addUser(Application application, User user) {
+        application.getUsers().add(user);
+        user.getApplications().add(application);
+    }
+
+    private void removeUser(Application application, User user) {
+        application.getUsers().remove(user);
+        user.getApplications().remove(application);
+    }
+
 }

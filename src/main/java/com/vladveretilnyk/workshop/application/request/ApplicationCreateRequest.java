@@ -1,5 +1,7 @@
 package com.vladveretilnyk.workshop.application.request;
 
+import com.vladveretilnyk.workshop.application.status.CompletionStatus;
+import com.vladveretilnyk.workshop.application.status.PaymentStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,8 +15,8 @@ public class ApplicationCreateRequest {
 
     private LocalDate creationDate = LocalDate.now();
 
-    private String completionStatus = "Not started";
-    private String paymentStatus = "Waiting for payment";
+    private CompletionStatus completionStatus = CompletionStatus.NOT_STARTED;
+    private PaymentStatus paymentStatus =PaymentStatus.WAITING_FOR_PAYMENT;
 
     private double price;
 

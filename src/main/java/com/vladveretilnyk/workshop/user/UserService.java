@@ -13,6 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 import static java.lang.String.format;
 
 @Service
@@ -31,6 +34,10 @@ public class UserService {
     public User findById(Long id) throws UserNotFountException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFountException(format("user with id %d not found!", id)));
+    }
+
+    public List<User> findAllByRoles(Set<UserRole> roles) {
+        return userRepository.findAllByAuthoritiesIn(roles);
     }
 
     public void save(User user) {
@@ -68,6 +75,46 @@ public class UserService {
 
         save(user);
         updateAuthorizedUser(user);
+    }
+
+    public void blockById(Long id) throws UserNotFountException {
+        User user = findById(id);
+        user.setAccountNonLocked(false);
+
+        save(user);
+    }
+
+    public void unblockById(Long id) throws UserNotFountException {
+        User user = findById(id);
+        user.setAccountNonLocked(true);
+
+        save(user);
+    }
+
+    public void unassignApplicationsForMaster(Long id) throws UserNotFountException {
+        User master = findById(id);
+
+        master.getApplications().forEach(application -> application.getUsers()
+                .removeIf(applicationUser -> applicationUser.equals(master)));
+
+        master.getApplications().clear();
+
+        save(master);
+    }
+
+    public void unassignApplicationsForUser(Long id) throws UserNotFountException {
+        User user = findById(id);
+
+        user.getApplications().forEach(application -> {
+            application.getUsers()
+                    .stream()
+                    .filter(applicationUser -> applicationUser.getAuthorities().contains(UserRole.MASTER))
+                    .forEach(applicationUser -> applicationUser.getApplications().remove(application));
+
+            application.getUsers().removeIf(applicationUser -> applicationUser.getAuthorities().contains(UserRole.MASTER));
+        });
+
+        save(user);
     }
 
 }
