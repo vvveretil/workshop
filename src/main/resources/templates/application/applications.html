@@ -36,7 +36,8 @@
                     <td>
                         <div th:if="${appl.users.size() <= 1}">
                             <span th:text="'Not set'"></span>
-                            <div style="margin-top: 5px" th:if="${appl.users.get(0).isAccountNonLocked}"
+                            <div style="margin-top: 5px"
+                                 th:if="${appl.users.get(0).isAccountNonLocked}"
                                  sec:authorize="hasAuthority('ROLE_ADMIN')">
                                 <a class="btn btn-success"
                                    th:href="@{/assign-master-to-application(applicationId=${appl.id})}">Choose
@@ -51,6 +52,7 @@
                                     <a th:href="@{/users/__${user.id}__}" th:text="${user.username}"> Master </a>
                                     <form style="margin-top: 5px" sec:authorize="hasAuthority('ROLE_ADMIN')"
                                           th:action="@{/assigned-applications(applicationId=${appl.id},masterId=${user.id})}"
+                                          th:if="${appl.completionStatus!=T(com.vladveretilnyk.workshop.application.status.CompletionStatus).COMPLETED}"
                                           th:method="delete">
                                         <button type="submit" class="btn btn-danger">Unassign</button>
                                     </form>
@@ -67,8 +69,15 @@
                             <a th:href="@{/applications/__${appl.id}__}" class="btn btn-info">Preview</a>
                         </div>
 
-                        <form th:if="${appl.completionStatus==T(com.vladveretilnyk.workshop.application.status.CompletionStatus).NOT_STARTED && appl.paymentStatus==T(com.vladveretilnyk.workshop.application.status.PaymentStatus).WAITING_FOR_PAYMENT}"
-                              style="margin-top: 10px" th:action="@{/applications/__${appl.id}__}" th:method="delete">
+                        <form th:if="${appl.completionStatus==T(com.vladveretilnyk.workshop.application.status.CompletionStatus).NOT_STARTED && appl.paymentStatus==T(com.vladveretilnyk.workshop.application.status.PaymentStatus).PAID}"
+                              style="margin-top: 10px" th:action="@{/applications/__${appl.id}__}"
+                              th:method="delete">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+
+                        <form sec:authorize="hasAuthority('ROLE_ADMIN')"
+                              style="margin-top: 10px" th:action="@{/applications/__${appl.id}__}"
+                              th:method="delete">
                             <button type="submit" class="btn btn-danger">Remove</button>
                         </form>
                     </td>

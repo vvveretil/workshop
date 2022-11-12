@@ -102,8 +102,8 @@ public class UserController {
         return USER_PAGE;
     }
 
-    @PostMapping("/blocked-users/{id}")
-    public String blockUser(@PathVariable(name = "id") Long userId) throws UserNotFountException {
+    @PostMapping("/blocked-users")
+    public String blockUser(@ModelAttribute(name = "userId") Long userId) throws UserNotFountException {
         userService.blockById(userId);
         userService.unassignApplicationsForUser(userId);
         return REDIRECT_USERS_PAGE;
@@ -115,8 +115,8 @@ public class UserController {
         return REDIRECT_USERS_PAGE;
     }
 
-    @PostMapping("/blocked-masters/{id}")
-    public String blockMaster(@PathVariable(name = "id") Long masterId) throws UserNotFountException {
+    @PostMapping("/blocked-masters")
+    public String blockMaster(@ModelAttribute(name = "masterId") Long masterId) throws UserNotFountException {
         userService.blockById(masterId);
         userService.unassignApplicationsForMaster(masterId);
         return REDIRECT_USERS_PAGE;

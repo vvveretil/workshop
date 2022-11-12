@@ -3,6 +3,7 @@ package com.vladveretilnyk.workshop.application;
 import com.vladveretilnyk.workshop.application.exception.ApplicationNotFoundException;
 import com.vladveretilnyk.workshop.application.request.ApplicationCreateRequest;
 import com.vladveretilnyk.workshop.application.request.ApplicationUpdateInfoRequest;
+import com.vladveretilnyk.workshop.application.status.CompletionStatus;
 import com.vladveretilnyk.workshop.user.User;
 import com.vladveretilnyk.workshop.user.UserRole;
 import com.vladveretilnyk.workshop.user.UserService;
@@ -81,6 +82,13 @@ public class ApplicationService {
         User master = userService.findById(masterId);
 
         removeUser(application, master);
+
+        save(application);
+    }
+
+    public void setCompletionStatusForApplicationById(Long id, CompletionStatus status) throws ApplicationNotFoundException {
+        Application application = findById(id);
+        application.setCompletionStatus(status);
 
         save(application);
     }

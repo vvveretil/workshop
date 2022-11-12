@@ -3,6 +3,7 @@ package com.vladveretilnyk.workshop.application;
 import com.vladveretilnyk.workshop.application.exception.ApplicationNotFoundException;
 import com.vladveretilnyk.workshop.application.request.ApplicationCreateRequest;
 import com.vladveretilnyk.workshop.application.request.ApplicationUpdateInfoRequest;
+import com.vladveretilnyk.workshop.application.status.CompletionStatus;
 import com.vladveretilnyk.workshop.user.User;
 import com.vladveretilnyk.workshop.user.exception.UserNotFountException;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ import static com.vladveretilnyk.workshop.config.Page.APPLICATION_PAGE;
 import static com.vladveretilnyk.workshop.config.Page.CREATE_APPLICATION_PAGE;
 import static com.vladveretilnyk.workshop.config.Page.EDIT_APPLICATION_PAGE;
 import static com.vladveretilnyk.workshop.config.Page.REDIRECT_APPLICATIONS_PAGE;
+import static com.vladveretilnyk.workshop.config.Page.REDIRECT_APPLICATION_PAGE;
 import static java.lang.String.format;
 
 @Controller
@@ -86,5 +88,17 @@ public class ApplicationController {
     public String unassignApplicationFromMaster(@RequestParam Long applicationId, @RequestParam Long masterId) throws ApplicationNotFoundException, UserNotFountException {
         applicationService.unassignApplicationFromMaster(applicationId, masterId);
         return REDIRECT_APPLICATIONS_PAGE;
+    }
+
+    @PostMapping("/started-applications")
+    public String setStartStatus(@ModelAttribute(name = "applicationId") Long applicationId) throws ApplicationNotFoundException {
+        applicationService.setCompletionStatusForApplicationById(applicationId, CompletionStatus.IN_PROGRESS);
+        return REDIRECT_APPLICATIONS_PAGE + format("/%d", applicationId);
+    }
+
+    @PostMapping("/completed-applications")
+    public String setCompletedStatus(@ModelAttribute(name = "applicationId") Long applicationId) throws ApplicationNotFoundException {
+        applicationService.setCompletionStatusForApplicationById(applicationId, CompletionStatus.COMPLETED);
+        return REDIRECT_APPLICATIONS_PAGE + format("/%d", applicationId);
     }
 }

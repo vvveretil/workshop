@@ -40,7 +40,9 @@
                     </td>
                     <td th:if="${#strings.isEmpty(applicationId)}">
                         <div  th:each="role : ${user.authorities}" th:object="${role}">
-                            <form th:if="${user.isAccountNonLocked && role.name=='USER'}" th:action="@{/blocked-users/__${user.id}__}" th:method="post">
+                            <form th:if="${user.isAccountNonLocked && role.name=='USER'}" th:action="@{/blocked-users}" th:method="post">
+                                <input th:value="${user.id}" type="hidden" name="userId"
+                                       class="form-control"/>
                                 <button type="submit" class="btn btn-danger">Block</button>
                             </form>
                             <form th:if="${!user.isAccountNonLocked && role.name=='USER'}"
@@ -49,7 +51,9 @@
                             </form>
 
                             <form th:if="${user.isAccountNonLocked && role.name=='MASTER'}"
-                                  th:action="@{/blocked-masters/__${user.id}__}" th:method="post">
+                                  th:action="@{/blocked-masters}" th:method="post">
+                                <input th:value="${user.id}" type="hidden" name="masterId"
+                                       class="form-control"/>
                                 <button type="submit" class="btn btn-danger">Block</button>
                             </form>
                             <form th:if="${!user.isAccountNonLocked && role.name=='MASTER'}" th:action="@{/blocked-masters/__${user.id}__}" th:method="delete">

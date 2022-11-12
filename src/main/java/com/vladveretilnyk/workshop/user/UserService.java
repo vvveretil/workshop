@@ -1,5 +1,6 @@
 package com.vladveretilnyk.workshop.user;
 
+import com.vladveretilnyk.workshop.application.status.CompletionStatus;
 import com.vladveretilnyk.workshop.password.PasswordService;
 import com.vladveretilnyk.workshop.password.exception.InvalidPasswordException;
 import com.vladveretilnyk.workshop.user.exception.UserNotFountException;
@@ -109,7 +110,8 @@ public class UserService {
             application.getUsers()
                     .stream()
                     .filter(applicationUser -> applicationUser.getAuthorities().contains(UserRole.MASTER))
-                    .forEach(applicationUser -> applicationUser.getApplications().remove(application));
+                    .forEach(applicationUser -> applicationUser.getApplications()
+                            .removeIf(userApplication -> userApplication.getCompletionStatus() != CompletionStatus.COMPLETED));
 
             application.getUsers().removeIf(applicationUser -> applicationUser.getAuthorities().contains(UserRole.MASTER));
         });

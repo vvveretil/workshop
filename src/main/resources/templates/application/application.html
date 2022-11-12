@@ -56,6 +56,18 @@
                 <li class="list-group-item ">
                     <div class="list-header">Completion status</div>
                     <div class="profile-item-value" th:text="${appl.completionStatus.status}"/>
+                    <form sec:authorize="hasAuthority('ROLE_MASTER')" th:if="${appl.completionStatus==T(com.vladveretilnyk.workshop.application.status.CompletionStatus).NOT_STARTED}"
+                          style="margin-top: 10px" th:action="@{/started-applications}" th:method="post">
+                        <input th:value="${appl.id}" type="hidden" name="applicationId"
+                               class="form-control"/>
+                        <button type="submit" class="btn btn-info">Start working on</button>
+                    </form>
+                    <form sec:authorize="hasAuthority('ROLE_MASTER')" th:if="${appl.completionStatus==T(com.vladveretilnyk.workshop.application.status.CompletionStatus).IN_PROGRESS}"
+                          style="margin-top: 10px" th:action="@{/completed-applications}" th:method="post">
+                        <input th:value="${appl.id}" type="hidden" name="applicationId"
+                               class="form-control"/>
+                        <button type="submit" class="btn btn-success">Complete working on</button>
+                    </form>
                 </li>
 
                 <li class="list-group-item ">
